@@ -13,6 +13,18 @@ import {Provider} from 'react-redux'
 //reducer //global for application
 const count = (state = 0, action) => {
   console.log('Hey im a reducer' , state);
+
+  if(action.type === 'INCREASE') {
+    console.log('you clicked increase');
+    //the next value of reduxStore.count will be one more than the previous value
+    return state + 1;
+  }
+  else if(action.type === 'DECREASE') {
+    console.log('you clicked decrease');
+    //the next value of reduxStore.count will be one more than the previous value
+    return state - 1;
+  }
+  // if action.type is anything else, just return last value of state
   return state
 }
 
