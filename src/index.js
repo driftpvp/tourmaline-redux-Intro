@@ -5,52 +5,50 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 //redux
-import { createStore, combineReducers} from 'redux';
-import {Provider} from 'react-redux'
-
-// old way | let [count, setCount] = useState(0) //local to component
-
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux'
+import logger from 'redux-logger';
+// let [count, setCount] = useState(0) //local to component
 //reducer //global for application
 const count = (state = 0, action) => {
-  console.log('Hey im a reducer' , state);
+  console.log('Hey im a reducer', state);
 
-  if(action.type === 'INCREASE') {
+  if (action.type === 'NumberGoUP') {
     console.log('you clicked increase');
-    //the next value of reduxStore.count will be one more than the previous value
-    return state + 1;
+    // The next value of 'reduxStore.count' will be 1 more than the previous value
+    return state + 1
+  } else if( action.type === 'DECREASE') {
+    return state - 1
   }
-  else if(action.type === 'DECREASE') {
-    console.log('you clicked decrease');
-    //the next value of reduxStore.count will be one more than the previous value
-    return state - 1;
-  }
-  // if action.type is anything else, just return last value of state
+  //if action.type is anything else, just return the last value of state
   return state
 }
-
-
 const elementList = (state = [], action) => {
+  if(action.type === 'ADD_ELEMENT') {
+    console.log(`The element was ${action.payload}`);
+    // [ old array contents , new item]
+    return [...state, action.payload]
+  }
   return state
 }
-
 //store
 const storeInstance = createStore(
-
   combineReducers(
     {
-  count,
-  elementList
+      count,
+      elementList
     }
+  ),
+  applyMiddleware(
+    logger
   )
 );
-
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={storeInstance}>
-    <App />
+      <App />
     </Provider>
   </React.StrictMode>
 );
